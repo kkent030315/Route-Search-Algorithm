@@ -677,10 +677,10 @@ namespace 経路探査アルゴリズム
             var right_hcost     = 0;
             var left_hcost      = 0;
 
-            if (up      != null)    up_hcost        = CalculateHeuristic(up.    GetCoordinate()     , goalCoord);
-            if (bottom  != null)    bottom_hcost    = CalculateHeuristic(bottom.GetCoordinate() , goalCoord);
-            if (right   != null)    right_hcost     = CalculateHeuristic(right. GetCoordinate()  , goalCoord);
-            if (left    != null)    left_hcost      = CalculateHeuristic(left.  GetCoordinate()   , goalCoord);
+            if (up      != null)    up_hcost        = CalculateHeuristic(up.    GetCoordinate(), goalCoord);
+            if (bottom  != null)    bottom_hcost    = CalculateHeuristic(bottom.GetCoordinate(), goalCoord);
+            if (right   != null)    right_hcost     = CalculateHeuristic(right. GetCoordinate(), goalCoord);
+            if (left    != null)    left_hcost      = CalculateHeuristic(left.  GetCoordinate(), goalCoord);
 
             if (up      != null)    up.     SetAnalyzeData(     cost,   up_hcost       );
             if (bottom  != null)    bottom. SetAnalyzeData(     cost,   bottom_hcost   );
