@@ -666,7 +666,6 @@ namespace 経路探査アルゴリズム
             if (right   != null && right.   GetAnalyzed())  right  = null;
             if (left    != null && left.    GetAnalyzed())  left   = null;
 
-
             if (up      != null && up.      GetTileType() == TileType.GoalTile) DrawLineCenterTileToTile(origin.GetCoordinate(), up.    GetCoordinate());
             if (bottom  != null && bottom.  GetTileType() == TileType.GoalTile) DrawLineCenterTileToTile(origin.GetCoordinate(), bottom.GetCoordinate());
             if (right   != null && right.   GetTileType() == TileType.GoalTile) DrawLineCenterTileToTile(origin.GetCoordinate(), right. GetCoordinate());
@@ -725,7 +724,6 @@ namespace 経路探査アルゴリズム
                 if (scores[m] == 0)                             continue;
                 if (scores[m] > min_score)                      continue;
                 if (scores[m] == min_score && cost >= min_cost) continue;
-                //if (scores[m] == min_score && cost == min_cost) LoggerForm.WriteError("both same");
 
                 min_score   = scores[m];
                 min_cost    = cost;
@@ -741,8 +739,6 @@ namespace 経路探査アルゴリズム
             if (min_tile.GetTileType() == TileType.Walkable)
             {
                 origin.SetAnalyzed(true);
-                //UpdateTile(origin.GetCoordinate(), TileType.AnalyzedTile);
-                //DrawText(min_cost.ToString(), Brushes.Black, PointToVector2(GetRednerTileLocation(min_tile.GetCoordinate())));
                 DrawLineCenterTileToTile(origin.GetCoordinate(), min_tile.GetCoordinate());
 
                 bool showScore = f.checkBox1.Checked;
@@ -780,7 +776,6 @@ namespace 経路探査アルゴリズム
                     LoggerForm.WriteInfo("-------------");
                 }
             }
-
             return min_tile;
         }
 
