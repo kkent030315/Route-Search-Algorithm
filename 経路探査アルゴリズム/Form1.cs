@@ -16,6 +16,9 @@ namespace 経路探査アルゴリズム
     {
         public static bool initialized = false;
 
+        ////////////////////////////////////////////////////////////////////////
+        // コンストラクタ
+        ////////////////////////////////////////////////////////////////////////
         public Form1()
         {
             InitializeComponent();
@@ -23,11 +26,17 @@ namespace 経路探査アルゴリズム
             pictureBox1.Image = World.bitmap;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // フォームが生成された時に発生するイベント
+        ////////////////////////////////////////////////////////////////////////
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // フォームが表示された時に発生するイベント
+        ////////////////////////////////////////////////////////////////////////
         private void Form1_Shown(object sender, EventArgs e)
         {
             LoggerForm form = new LoggerForm();
@@ -37,26 +46,21 @@ namespace 経路探査アルゴリズム
 
             World.CreateContext();
             World.CreateMap();
-
-            //World.AnalyzeMap();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ピクチャボックスの描画イベント
+        ////////////////////////////////////////////////////////////////////////
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             pictureBox1.Image = World.GetBitmap();
         }
 
-        private async void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
-        {
-            World.graphics = Graphics.FromImage(World.GetBitmap());
-            Random r = new Random();
-            while(true)
-            {
-                World.DrawText(r.Next(0, 1000).ToString(), Brushes.Red, new Vector2(10, 10));
-                await Task.Delay(150);
-            }
-        }
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) { }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルの更新
+        ////////////////////////////////////////////////////////////////////////
         private void button1_Click(object sender, EventArgs e)
         {
             int x = (int)numericUpDown1.Value;
@@ -64,6 +68,9 @@ namespace 経路探査アルゴリズム
             SendUpdateTile(new Vector2(x, y), comboBox1.SelectedIndex);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルの更新を送信
+        ////////////////////////////////////////////////////////////////////////
         private void SendUpdateTile(Vector2 coord, int index)
         {
             switch (index)
@@ -88,6 +95,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マウスを動かした時に発生するイベント
+        ////////////////////////////////////////////////////////////////////////
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = World.GetTileCoordByMouseCoord(new Vector2(e.X, e.Y));
@@ -95,17 +105,26 @@ namespace 経路探査アルゴリズム
             label1.Text = "座標: " + pos.x + ", " + pos.y + " | " + attr;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // クリックしたタイルを更新
+        ////////////////////////////////////////////////////////////////////////
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
             var pos = World.GetTileCoordByMouseCoord(new Vector2(e.X, e.Y));
             SendUpdateTile(pos, comboBox2.SelectedIndex);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップを更新
+        ////////////////////////////////////////////////////////////////////////
         private void button2_Click(object sender, EventArgs e)
         {
             World.UpdateMap();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // テキストファイルとしてマップを出力
+        ////////////////////////////////////////////////////////////////////////
         private void button3_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -133,6 +152,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // テキストファイルとしてマップを入力
+        ////////////////////////////////////////////////////////////////////////
         private void button4_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -184,11 +206,17 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 探索開始
+        ////////////////////////////////////////////////////////////////////////
         private void button5_Click(object sender, EventArgs e)
         {
             World.AnalyzeMap();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップをリセット
+        ////////////////////////////////////////////////////////////////////////
         private void button6_Click(object sender, EventArgs e)
         {
             World.ResetMap();

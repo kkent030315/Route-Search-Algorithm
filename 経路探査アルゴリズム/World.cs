@@ -14,6 +14,9 @@ namespace 経路探査アルゴリズム
 {
     class World
     {
+        ////////////////////////////////////////////////////////////////////////
+        // 方角を示すEnum
+        ////////////////////////////////////////////////////////////////////////
         public enum ArrowVector
         {
             NULL,
@@ -30,17 +33,36 @@ namespace 経路探査アルゴリズム
             DOWN_LEFT,
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // グラフィック関連
+        ////////////////////////////////////////////////////////////////////////
         public static Graphics  graphics { get; set; }
         public static Bitmap    bitmap { get; set; }
+
+        ////////////////////////////////////////////////////////////////////////
+        // 文字描画に使用するフォント
+        ////////////////////////////////////////////////////////////////////////
 
         public static Font font     = new Font("Arial", 6);
         public static Font TileFont = new Font("Arial", 50);
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップの最大サイズ
+        ////////////////////////////////////////////////////////////////////////
+
         public static readonly int MAX_COORD_X = 25;
         public static readonly int MAX_COORD_Y = 25;
 
+        ////////////////////////////////////////////////////////////////////////
+        // インスタンス
+        ////////////////////////////////////////////////////////////////////////
+
         private static Form1 f              = new Form1();
         private static LoggerForm logger    = new LoggerForm();
+
+        ////////////////////////////////////////////////////////////////////////
+        // 描画に使用される色
+        ////////////////////////////////////////////////////////////////////////
 
         private static Pen   colorWorkable  = Pens.Black;
         private static Brush colorWall      = Brushes.Gray;
@@ -48,6 +70,10 @@ namespace 経路探査アルゴリズム
         private static Brush colorGoal      = Brushes.Red;
         private static Brush colorNull      = Brushes.White;
         private static Brush colorAnalyzed  = Brushes.DarkKhaki;
+
+        ////////////////////////////////////////////////////////////////////////
+        // タイル情報 CreateMap()で確定される Paddingはタイル間隔(未実装)
+        ////////////////////////////////////////////////////////////////////////
 
         private static int tilePadding  = 2;
         private static int tileSizeX    = 0;
@@ -57,6 +83,9 @@ namespace 経路探査アルゴリズム
 
         public World() { }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップを初期化 & 空タイルを敷き詰める
+        ////////////////////////////////////////////////////////////////////////
         public static void CreateMap()
         {
             tileBlocks = new TileBlock[MAX_COORD_X, MAX_COORD_Y];
@@ -75,12 +104,18 @@ namespace 経路探査アルゴリズム
             LoggerForm.WriteSuccess("Map created.");
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップをリセット
+        ////////////////////////////////////////////////////////////////////////
         public static void ResetMap()
         {
             GetGraphics().Clear(Color.White);
             CreateMap();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップの全タイルを更新
+        ////////////////////////////////////////////////////////////////////////
         public static void UpdateMap(TileBlock[,] tiles = null)
         {
             if(tiles!=null)ResetMap();
@@ -94,6 +129,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルを追加
+        ////////////////////////////////////////////////////////////////////////
         public static bool AddTile(Vector2 coord, TileType type)
         {
             if (!VaildCoord(coord)) return false;
@@ -115,6 +153,9 @@ namespace 経路探査アルゴリズム
             return false;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 該当タイルを更新
+        ////////////////////////////////////////////////////////////////////////
         public static bool UpdateTile(Vector2 coord, TileType type)
         {
             if (!VaildCoord(coord)) return false;
@@ -136,6 +177,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイル座標を取得
+        ////////////////////////////////////////////////////////////////////////
         public static Vector2 GetTileCoordByTileType(TileType type)
         {
             for (int x = 0; x < MAX_COORD_X; x++)
@@ -152,12 +196,18 @@ namespace 経路探査アルゴリズム
             return new Vector2(0, 0);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルクラスを取得
+        ////////////////////////////////////////////////////////////////////////
         public static TileBlock GetTileBlock(Vector2 coord)
         {
             if (!IsTileBlockExists(coord)) return null;
             return tileBlocks[coord.x, coord.y];
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイル属性からタイルクラスを取得
+        ////////////////////////////////////////////////////////////////////////
         public static TileBlock GetTileBlockByTileType(TileType type)
         {
             for (int x = 0; x < MAX_COORD_X; x++)
@@ -175,6 +225,9 @@ namespace 経路探査アルゴリズム
             return null;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルを描画
+        ////////////////////////////////////////////////////////////////////////
         private static bool DrawRectWithTileType(TileType type, Rectangle rect)
         {
             switch (type)
@@ -203,6 +256,9 @@ namespace 経路探査アルゴリズム
             return true;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // IndexOutOfRangeしない為の座標チェック
+        ////////////////////////////////////////////////////////////////////////
         private static bool VaildCoord(Vector2 coord)
         {
             if (coord.x > MAX_COORD_X || coord.y > MAX_COORD_Y)
@@ -215,6 +271,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルが存在するか確認
+        ////////////////////////////////////////////////////////////////////////
         public static bool IsTileBlockExists(Vector2 coord)
         {
             if (IsOutOfIndex(coord)) return false;
@@ -229,43 +288,67 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // タイルを描画する際に使用するRectの取得
+        ////////////////////////////////////////////////////////////////////////
         public static Rectangle GetRectangle(Vector2 coord)
         {
             return new Rectangle(GetRednerTileLocation(coord), GetTileSize());
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上のタイルのサイズを取得
+        ////////////////////////////////////////////////////////////////////////
         public static Size GetTileSize()
         {
             return new Size(tileSizeX, tileSizeY);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップ全体における余白の取得
+        ////////////////////////////////////////////////////////////////////////
         public static Vector2 GetWhiteSpace()
         {
             return new Vector2((bitmap.Width - (GetTileSize().Width * MAX_COORD_X)) / 2, (bitmap.Height - (GetTileSize().Height * MAX_COORD_Y)) / 2);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上におけるタイル描画の位置を取得
+        ////////////////////////////////////////////////////////////////////////
         public static Point GetRednerTileLocation(Vector2 coord)
         {
             Vector2 drawCoord = new Vector2(tileSizeX * coord.x, tileSizeY * coord.y);
             return new Point(drawCoord.x + GetWhiteSpace().x, drawCoord.y + GetWhiteSpace().y);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上における該当タイルの中心座標を取得
+        ////////////////////////////////////////////////////////////////////////
         public static Point GetRenderTileLocationCenter(Vector2 coord)
         {
             Vector2 drawCoord = new Vector2(tileSizeX * coord.x, tileSizeY * coord.y);
             return new Point(drawCoord.x + GetWhiteSpace().x / 2, drawCoord.y + GetWhiteSpace().y / 2);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上に文字を描画
+        ////////////////////////////////////////////////////////////////////////
         public static void DrawText(string text, Brush brush, Vector2 coord)
         {
             GetGraphics().DrawString(text, font, brush, new Point(coord.x, coord.y));
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上に線を描画
+        ////////////////////////////////////////////////////////////////////////
         public static void DrawLine(Vector2 start, Vector2 end)
         {
             GetGraphics().DrawLine(Pens.Green, start.x, start.y, end.x, end.y);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ２つのタイルの中心から中心へ線を描画
+        ////////////////////////////////////////////////////////////////////////
         public static void DrawLineCenterTileToTile(Vector2 start, Vector2 end)
         {
             Vector2 誤差 = new Vector2(1, 1);
@@ -273,6 +356,9 @@ namespace 経路探査アルゴリズム
                     PointToVector2(GetRenderTileLocationCenter(end + 誤差)));
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上のマウス座標からタイル座標を取得
+        ////////////////////////////////////////////////////////////////////////
         public static Vector2 GetTileCoordByMouseCoord(Vector2 coord)
         {
             for(int x = 0; x < MAX_COORD_X; x++)
@@ -300,16 +386,25 @@ namespace 経路探査アルゴリズム
             return new Vector2(0, 0);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップ上のマウス座標から該当タイルの属性を取得
+        ////////////////////////////////////////////////////////////////////////
         public static AnalyzeAttributes GetTileAttributeByMouseCoord(Vector2 coord)
         {
             return GetTileBlock(coord).GetAttributes();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // グラフィックを取得
+        ////////////////////////////////////////////////////////////////////////
         private static Graphics GetGraphics()
         {
             return graphics;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップを取得
+        ////////////////////////////////////////////////////////////////////////
         public static Bitmap GetBitmap()
         {
             lock(bitmap)
@@ -318,6 +413,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // ビットマップを使用して描画するための初期化関数
+        ////////////////////////////////////////////////////////////////////////
         public static void CreateContext()
         {
             graphics = Graphics.FromImage(GetBitmap());
@@ -331,6 +429,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 作成したコンテキストを破棄
+        ////////////////////////////////////////////////////////////////////////
         public static void DestroyContext()
         {
             lock (graphics)
@@ -339,21 +440,33 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 新しいフレームを開始　実態は描画クリア
+        ////////////////////////////////////////////////////////////////////////
         public static void NewFrame()
         {
             GetGraphics().Clear(Color.White);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 描画を更新
+        ////////////////////////////////////////////////////////////////////////
         public static void EndFrame()
         {
             f.pictureBox1.Refresh();
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 現在のマップデータを出力
+        ////////////////////////////////////////////////////////////////////////
         public static TileBlock[,] ExportCurrentMapData()
         {
             return tileBlocks;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップデータを入力
+        ////////////////////////////////////////////////////////////////////////
         public static void ImportMapData(TileBlock[,] datas)
         {
             try
@@ -366,6 +479,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 全てのタイルに探索属性を付与
+        ////////////////////////////////////////////////////////////////////////
         public static void SetTileAttributesToAll()
         {
             for (int x = 0; x < MAX_COORD_X; x++)
@@ -390,6 +506,9 @@ namespace 経路探査アルゴリズム
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // スタートからゴールへの方角を定める
+        ////////////////////////////////////////////////////////////////////////
         public static ArrowVector CalculateVector(ArrowVector vectorX, ArrowVector vectorY)
         {
             if(vectorY == ArrowVector.UP && vectorX == ArrowVector.RIGHT)
@@ -429,6 +548,9 @@ namespace 経路探査アルゴリズム
             return ArrowVector.NULL;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // オーバーロード 座標からスタートからゴールへの方角を算出
+        ////////////////////////////////////////////////////////////////////////
         public static ArrowVector CalculateVector(Vector2 start, Vector2 goal)
         {
             if(start.x == goal.x)
@@ -464,6 +586,9 @@ namespace 経路探査アルゴリズム
             return ArrowVector.NULL;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 推定コストを算出
+        ////////////////////////////////////////////////////////////////////////
         public static int CalculateHeuristic(Vector2 currentPos, Vector2 goal)
         {
             var xX = Math.Abs(goal.x - currentPos.x);
@@ -471,6 +596,9 @@ namespace 経路探査アルゴリズム
             return xX + Yy;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // IndexOutOfRange防止の為のチェック
+        ////////////////////////////////////////////////////////////////////////
         public static bool IsOutOfIndex(Vector2 coord)
         {
             if (coord.x < 0 || coord.x >= MAX_COORD_X)
@@ -484,6 +612,9 @@ namespace 経路探査アルゴリズム
             return false;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 探索においてネガティブな属性であるかチェック
+        ////////////////////////////////////////////////////////////////////////
         public static bool IsNegativeAttribute(TileBlock tile)
         {
             var attr = tile.GetAttributes();
@@ -497,11 +628,17 @@ namespace 経路探査アルゴリズム
             return false;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // PointをVector2に変換
+        ////////////////////////////////////////////////////////////////////////
         public static Vector2 PointToVector2(Point p)
         {
             return new Vector2(p.X, p.Y);
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // 4方向から進むに最適なタイルを算出
+        ////////////////////////////////////////////////////////////////////////
         private static TileBlock GetBestTile(TileBlock origin, int cost)
         {
             if (origin.GetTileType() == TileType.GoalTile || origin.GetAnalyzed())
@@ -645,6 +782,9 @@ namespace 経路探査アルゴリズム
             return min_tile;
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップを探索
+        ////////////////////////////////////////////////////////////////////////
         public static async void AnalyzeMap()
         {
             LoggerForm.WriteSuccess("探索開始");
