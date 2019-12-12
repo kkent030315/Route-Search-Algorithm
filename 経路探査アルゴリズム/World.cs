@@ -522,14 +522,13 @@ namespace 経路探査アルゴリズム
             {
                 return ArrowVector.UP_LEFT;
             }
-
             else if (vectorY == ArrowVector.DOWN && vectorX == ArrowVector.RIGHT)
             {
-                return ArrowVector.UP_RIGHT;
+                return ArrowVector.DOWN_RIGHT;
             }
             else if (vectorY == ArrowVector.DOWN && vectorX == ArrowVector.LEFT)
             {
-                return ArrowVector.UP_LEFT;
+                return ArrowVector.DOWN_LEFT;
             }
             else if (vectorX == vectorY && vectorX == ArrowVector.UP)
             {
