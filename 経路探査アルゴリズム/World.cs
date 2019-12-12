@@ -790,7 +790,7 @@ namespace 経路探査アルゴリズム
             SetTileAttributesToAll();
 
             var startTile   = GetTileBlockByTileType(TileType.StartTile);
-            var goalTile    = GetTileBlockByTileType(TileType.GoalTile);
+            var goalTile    = GetTileBlockByTileType(TileType.GoalTile );
 
             if(startTile == null || goalTile == null)
             {
@@ -805,8 +805,8 @@ namespace 経路探査アルゴリズム
                 return;
             }
 
-            var startTileCoord = startTile.GetCoordinate();
-            var goalTileCoord = goalTile.GetCoordinate();
+            var startTileCoord  = startTile.GetCoordinate();
+            var goalTileCoord   = goalTile. GetCoordinate();
 
             var k = 0;
             TileBlock bestTile = startTile;
