@@ -19,51 +19,47 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         public enum ArrowVector
         {
-            NULL,
+            NULL        ,
 
-            UP,
-            DOWN,
-            RIGHT,
-            LEFT,
+            UP          ,
+            DOWN        ,
+            RIGHT       ,
+            LEFT        ,
 
-            UP_RIGHT,
-            UP_LEFT,
+            UP_RIGHT    ,
+            UP_LEFT     ,
 
-            DOWN_RIGHT,
-            DOWN_LEFT,
+            DOWN_RIGHT  ,
+            DOWN_LEFT   ,
         }
 
         ////////////////////////////////////////////////////////////////////////
         // グラフィック関連
         ////////////////////////////////////////////////////////////////////////
         public static Graphics  graphics { get; set; }
-        public static Bitmap    bitmap { get; set; }
+        public static Bitmap    bitmap   { get; set; }
 
         ////////////////////////////////////////////////////////////////////////
         // 文字描画に使用するフォント
         ////////////////////////////////////////////////////////////////////////
-
-        public static Font font     = new Font("Arial", 6);
+        public static Font font     = new Font("Arial",  6);
         public static Font TileFont = new Font("Arial", 50);
 
         ////////////////////////////////////////////////////////////////////////
         // マップの最大サイズ
         ////////////////////////////////////////////////////////////////////////
-
         public static readonly int MAX_COORD_X = 25;
         public static readonly int MAX_COORD_Y = 25;
 
         ////////////////////////////////////////////////////////////////////////
         // インスタンス
         ////////////////////////////////////////////////////////////////////////
-
         private static Form1 f              = new Form1();
         private static LoggerForm logger    = new LoggerForm();
 
         ////////////////////////////////////////////////////////////////////////
         // 描画に使用される色
         ////////////////////////////////////////////////////////////////////////
-
         private static Pen   colorWorkable  = Pens.Black;
         private static Brush colorWall      = Brushes.Gray;
         private static Brush colorStart     = Brushes.Blue;
@@ -74,11 +70,13 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         // タイル情報 CreateMap()で確定される Paddingはタイル間隔(未実装)
         ////////////////////////////////////////////////////////////////////////
-
         private static int tilePadding  = 2;
         private static int tileSizeX    = 0;
         private static int tileSizeY    = 0;
 
+        ////////////////////////////////////////////////////////////////////////
+        // マップ上のタイルを保持する2次元配列 [x, y]
+        ////////////////////////////////////////////////////////////////////////
         private static TileBlock[,] tileBlocks { get; set; }
 
         public World() { }
@@ -309,7 +307,9 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         public static Vector2 GetWhiteSpace()
         {
-            return new Vector2((bitmap.Width - (GetTileSize().Width * MAX_COORD_X)) / 2, (bitmap.Height - (GetTileSize().Height * MAX_COORD_Y)) / 2);
+            var x = (bitmap.Width  - (GetTileSize().Width  * MAX_COORD_X)) / 2;
+            var y = (bitmap.Height - (GetTileSize().Height * MAX_COORD_Y)) / 2;
+            return new Vector2(x, y);
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -675,10 +675,10 @@ namespace 経路探査アルゴリズム
             var right_hcost     = 0;
             var left_hcost      = 0;
 
-            if (up      != null)    up_hcost        = CalculateHeuristic(up.GetCoordinate()     , goalCoord);
+            if (up      != null)    up_hcost        = CalculateHeuristic(up.    GetCoordinate()     , goalCoord);
             if (bottom  != null)    bottom_hcost    = CalculateHeuristic(bottom.GetCoordinate() , goalCoord);
-            if (right   != null)    right_hcost     = CalculateHeuristic(right.GetCoordinate()  , goalCoord);
-            if (left    != null)    left_hcost      = CalculateHeuristic(left.GetCoordinate()   , goalCoord);
+            if (right   != null)    right_hcost     = CalculateHeuristic(right. GetCoordinate()  , goalCoord);
+            if (left    != null)    left_hcost      = CalculateHeuristic(left.  GetCoordinate()   , goalCoord);
 
             if (up      != null)    up.     SetAnalyzeData(     cost,   up_hcost       );
             if (bottom  != null)    bottom. SetAnalyzeData(     cost,   bottom_hcost   );
@@ -695,35 +695,35 @@ namespace 経路探査アルゴリズム
             if (right   != null)    right_score     = right.    GetScore();
             if (left    != null)    left_score      = left.     GetScore();
 
-            var scores  = new int[4];
-            scores[0]   = up_score;
-            scores[1]   = bottom_score;
-            scores[2]   = right_score;
-            scores[3]   = left_score;
+            var scores  = new int[4]    ;
+            scores[0]   = up_score      ;
+            scores[1]   = bottom_score  ;
+            scores[2]   = right_score   ;
+            scores[3]   = left_score    ;
 
-            var hcosts  = new int[4];
-            hcosts[0]   = up_hcost;
-            hcosts[1]   = bottom_hcost;
-            hcosts[2]   = right_hcost;
-            hcosts[3]   = left_hcost;
+            var hcosts  = new int[4]    ;
+            hcosts[0]   = up_hcost      ;
+            hcosts[1]   = bottom_hcost  ;
+            hcosts[2]   = right_hcost   ;
+            hcosts[3]   = left_hcost    ;
 
-            var tiles   = new TileBlock[4];
-            tiles[0]    = up;
-            tiles[1]    = bottom;
-            tiles[2]    = right;
-            tiles[3]    = left;
+            var tiles   = new TileBlock[4]  ;
+            tiles[0]    = up                ;
+            tiles[1]    = bottom            ;
+            tiles[2]    = right             ;
+            tiles[3]    = left              ;
 
-            var min_score   = int.MaxValue;
-            var min_cost    = int.MaxValue;
-            var min_hcost   = int.MaxValue;
-            var min_tile    = origin;
+            var min_score   = int.MaxValue  ;
+            var min_cost    = int.MaxValue  ;
+            var min_hcost   = int.MaxValue  ;
+            var min_tile    = origin        ;
 
             for(int m = 0; m < 4; m++)
             {
-                if (scores[m] == 0)         continue;
-                if (scores[m] > min_score)  continue;
+                if (scores[m] == 0)                             continue;
+                if (scores[m] > min_score)                      continue;
                 if (scores[m] == min_score && cost >= min_cost) continue;
-                if (scores[m] == min_score && cost == min_cost) LoggerForm.WriteError("both same");
+                //if (scores[m] == min_score && cost == min_cost) LoggerForm.WriteError("both same");
 
                 min_score   = scores[m];
                 min_cost    = cost;

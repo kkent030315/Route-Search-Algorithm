@@ -13,12 +13,12 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         public enum TileType : int
         {
-            Walkable = 1,
-            Wall = 2,
-            StartTile = 3,
-            GoalTile = 4,
-            NullTile = 5,
-            AnalyzedTile = 6
+            Walkable        = 1,
+            Wall            = 2,
+            StartTile       = 3,
+            GoalTile        = 4,
+            NullTile        = 5,
+            AnalyzedTile    = 6
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         public enum AnalyzeAttributes : int
         {
-            INull = 0x00000000,
+            INull       = 0x00000000,
             IOpenedTile = 0x00000030,
             IClosedTile = 0x00000040,
         }
@@ -46,11 +46,11 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         private struct TileStruct
         {
-            public Vector2 coordinate;
-            public TileType tileType;
-            public AnalyzeAttributes attributes;
-            public AnalyzeData analyzeData;
-            public bool isAnalyzed;
+            public Vector2              coordinate;
+            public TileType             tileType;
+            public AnalyzeAttributes    attributes;
+            public AnalyzeData          analyzeData;
+            public bool                 isAnalyzed;
         }
 
         private TileStruct tile;
@@ -60,9 +60,9 @@ namespace 経路探査アルゴリズム
         ////////////////////////////////////////////////////////////////////////
         public TileBlock(Vector2 coord, TileType type)
         {
-            tile = new TileStruct();
+            tile            = new TileStruct();
             tile.coordinate = coord;
-            tile.tileType = type;
+            tile.tileType   = type;
             tile.attributes = AnalyzeAttributes.INull;
             tile.isAnalyzed = false;
         }
