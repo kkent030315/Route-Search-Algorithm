@@ -697,17 +697,17 @@ namespace 経路探査アルゴリズム
             if (right   != null)    right_score     = right.    GetScore();
             if (left    != null)    left_score      = left.     GetScore();
 
-            var scores  = new int[4]    ;
-            scores[0]   = up_score      ;
-            scores[1]   = bottom_score  ;
-            scores[2]   = right_score   ;
-            scores[3]   = left_score    ;
+            var scores  = new int[4]        ;
+            scores[0]   = up_score          ;
+            scores[1]   = bottom_score      ;
+            scores[2]   = right_score       ;
+            scores[3]   = left_score        ;
 
-            var hcosts  = new int[4]    ;
-            hcosts[0]   = up_hcost      ;
-            hcosts[1]   = bottom_hcost  ;
-            hcosts[2]   = right_hcost   ;
-            hcosts[3]   = left_hcost    ;
+            var hcosts  = new int[4]        ;
+            hcosts[0]   = up_hcost          ;
+            hcosts[1]   = bottom_hcost      ;
+            hcosts[2]   = right_hcost       ;
+            hcosts[3]   = left_hcost        ;
 
             var tiles   = new TileBlock[4]  ;
             tiles[0]    = up                ;
